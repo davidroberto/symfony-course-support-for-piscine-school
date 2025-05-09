@@ -15,7 +15,7 @@ class AdminProductController extends AbstractController {
 
 
 	#[Route('/admin/create-product', name: 'admin-create-product')]
-	public function displayCreateProduct(CategoryRepository $categoryRepository, Request $request) {
+	public function displayCreateProduct(CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $entityManager) {
 
 		if ($request->isMethod('POST')) {
 
@@ -29,6 +29,13 @@ class AdminProductController extends AbstractController {
 			} else {
 				$isPublished = false;
 			}
+
+			$category = $categoryRepository->find($categoryId);
+
+			$product = new Product($title, $description, $price, $isPublished, $category);
+		
+			$entityManager->persist($product);
+			$entityManager->flush();
 		}
 
 		$categories = $categoryRepository->findAll();
@@ -38,26 +45,27 @@ class AdminProductController extends AbstractController {
 		]);
 	}
 
-	#[Route('/admin/create-product-form-sf', name: 'admin-create-product-form-sf')]
-	public function displayCreateProductFormSf(Request $request, EntityManagerInterface $entityManager) {
-
-		$product = new Product();
-
-		$productForm = $this->createForm(ProductForm::class, $product);
-		$productForm->handleRequest($request);
-
-		if ($productForm->isSubmitted()) {
-			$product->setCreatedAt(new \DateTime());
-			$product->setUpdatedAt(new \DateTime());
-
-			$entityManager->persist($product);
-			$entityManager->flush();
-		}
-		
-		return $this->render('admin/product/create-product-form-sf.html.twig', [
-			'productForm' => $productForm->createView()
-		]);
-	}
-
+	/**
+	 * #[Route('/admin/create-product-form-sf', name: 'admin-create-product-form-sf')]
+	*public function displayCreateProductFormSf(Request $request, EntityManagerInterface $entityManager) {
+	*
+	*	$product = new Product();
+	*
+	*		$productForm = $this->createForm(ProductForm::class, $product);
+	*	$productForm->handleRequest($request);
+	*
+	*	if ($productForm->isSubmitted()) {
+	*		$product->setCreatedAt(new \DateTime());
+	*		$product->setUpdatedAt(new \DateTime());
+	*
+	*		$entityManager->persist($product);
+	*		$entityManager->flush();
+	*	}
+	*	
+	*	return $this->render('admin/product/create-product-form-sf.html.twig', [
+	*		'productForm' => $productForm->createView()
+	*	]);
+	*}
+	**/
 
 }
