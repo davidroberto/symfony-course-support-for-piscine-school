@@ -64,6 +64,21 @@ class AdminProductController extends AbstractController {
 	}
 
 
+	#[Route('/admin/delete-product/{id}', name:'admin-delete-product')]
+	public function deleteProduct($id, ProductRepository $productRepository, EntityManagerInterface $entityManager) {
+		
+		$product = $productRepository->find($id);
+
+		$entityManager->remove($product);
+		$entityManager->flush();
+
+		$this->addFlash('success', 'Produit supprimé !');
+
+		return $this->redirectToRoute('admin-list-products');
+
+	}
+
+
 	/** AUTRE FACON DE GERER LES FORMS AVEC SYMFONY
 	 * #[Route('/admin/create-product-form-sf', name: 'admin-create-product-form-sf')]
 	*public function displayCreateProductFormSf(Request $request, EntityManagerInterface $entityManager) {
