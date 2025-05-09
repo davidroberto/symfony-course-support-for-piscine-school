@@ -3,7 +3,10 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Product;
+use App\Form\ProductForm;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +16,6 @@ class AdminProductController extends AbstractController {
 
 	#[Route('/admin/create-product', name: 'admin-create-product')]
 	public function displayCreateProduct(CategoryRepository $categoryRepository, Request $request) {
-
 
 		if ($request->isMethod('POST')) {
 
@@ -27,13 +29,6 @@ class AdminProductController extends AbstractController {
 			} else {
 				$isPublished = false;
 			}
-
-			dump($title);
-			dump($description);
-			dump($price);
-			dump($categoryId);
-			dump($isPublished);
-			die;
 		}
 
 		$categories = $categoryRepository->findAll();
@@ -41,8 +36,27 @@ class AdminProductController extends AbstractController {
 		return $this->render('admin/product/create-product.html.twig', [
 			'categories' => $categories
 		]);
+	}
 
+	#[Route('/admin/create-product-form-sf', name: 'admin-create-product-form-sf')]
+	public function displayCreateProductFormSf(Request $request, EntityManagerInterface $entityManager) {
 
+		$product = new Product();
+
+		$productForm = $this->createForm(ProductForm::class, $product);
+		$productForm->handleRequest($request);
+
+		if ($productForm->isSubmitted()) {
+			$product->setCreatedAt(new \DateTime());
+			$product->setUpdatedAt(new \DateTime());
+
+			$entityManager->persist($product);
+			$entityManager->flush();
+		}
+		
+		return $this->render('admin/product/create-product-form-sf.html.twig', [
+			'productForm' => $productForm->createView()
+		]);
 	}
 
 
