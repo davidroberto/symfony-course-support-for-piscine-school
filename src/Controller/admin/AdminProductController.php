@@ -4,7 +4,7 @@
 namespace App\Controller\admin;
 
 use App\Entity\Product;
-use App\Form\ProductForm;
+
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,10 +32,16 @@ class AdminProductController extends AbstractController {
 
 			$category = $categoryRepository->find($categoryId);
 
-			$product = new Product($title, $description, $price, $isPublished, $category);
-		
-			$entityManager->persist($product);
-			$entityManager->flush();
+			try {
+				$product = new Product($title, $description, $price, $isPublished, $category);
+
+				$entityManager->persist($product);
+				$entityManager->flush();
+			} catch (\Exception $exception) {
+				$this->addFlash('error', $exception->getMessage());
+			}
+
+
 		}
 
 		$categories = $categoryRepository->findAll();
