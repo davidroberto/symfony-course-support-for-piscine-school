@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -33,10 +34,21 @@ class AdminUserController extends AbstractController {
 			// méthode 2 
 			$user->createAdmin($email, $passwordHashed);
 
-			$entityManager->persist($user);
-			$entityManager->flush();
+			try {
+				$entityManager->persist($user);
+				$entityManager->flush();
+				$this->addFlash('success','Admin créé');
+			} catch(Exception $exception) {
 
-			$this->addFlash('success','Admin créé');
+				$this->addFlash('error', 'Impossible de créer l\'admin');
+
+				// si l'erreur vient de la clé d'unicité, je créé un message flash ciblé
+				if ($exception->getCode() === '1062') {
+					$this->addFlash('error',  'Email déjà pris.');
+				}
+				
+			}
+
 
 		}
 
