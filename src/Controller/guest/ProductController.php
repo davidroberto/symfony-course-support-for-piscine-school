@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController {
 
 
-	#[Route('/list-products', name:'list-products')]
+	#[Route('/list-products', name:'list-products', methods: ['GET'])]
 	public function displayListProducts(ProductRepository $productRepository): Response {
 		
 		$productsPublished = $productRepository->findBy(['isPublished' => true]);
@@ -21,7 +21,7 @@ class ProductController extends AbstractController {
 		]);
 	}
 
-	#[Route('/details-product/{id}', name:'details-product')]
+	#[Route('/details-product/{id}', name:'details-product', methods: ['GET'])]
 	public function displayDetailsProduct(ProductRepository $productRepository, int $id): Response {
 		
 		$product = $productRepository->find($id);
