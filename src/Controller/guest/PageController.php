@@ -13,7 +13,7 @@ class PageController extends AbstractController {
 	#[Route('/', name: 'home', methods: ['GET'])]
 	public function displayHome(): Response
 	{
-		return $this->render('home.html.twig');
+		return $this->render('guest/home.html.twig');
 	}
 
 	#[Route('/404', name: '404', methods: ['GET'])]

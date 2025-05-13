@@ -21,7 +21,6 @@
 			<input type="checkbox" name="is-published">
 		</label>
 
-
 		<select name="category-id">
 
 			{% for category in categories %}
@@ -29,6 +28,10 @@
 			{% endfor %}
 		
 		</select>
+
+		<label for="image">Image
+			<input type="file" name="image">
+		</label>
 
 		<button type="submit">Créer le produit</button>
 
