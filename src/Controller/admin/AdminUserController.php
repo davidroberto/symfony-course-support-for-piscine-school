@@ -9,13 +9,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminUserController extends AbstractController {
 
 	#[Route(path: '/admin/create-user', name: 'admin-create-user')]
-	public function displayCreateUser(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager){
+	public function displayCreateUser(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response{
 
 		if ($request->isMethod('POST')) {
 
@@ -60,7 +61,7 @@ class AdminUserController extends AbstractController {
 
 
 	#[Route(path: '/admin/list-admins', name: 'admin-list-admins')]
-	public function displayListAdmins(UserRepository $userRepository) {
+	public function displayListAdmins(UserRepository $userRepository): Response {
 
 		$users = $userRepository->findAll();
 

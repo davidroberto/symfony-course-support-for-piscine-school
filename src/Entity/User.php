@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
 
-    public function createAdmin($email, $passwordHashed) {
+    public function createAdmin(string $email, string $passwordHashed) {
         $this->email = $email;
         $this->password = $passwordHashed;
 

@@ -5,13 +5,14 @@ namespace App\Controller\guest;
 
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController {
 
 
 	#[Route('/list-categories', name:'list-categories')]
-	public function displayListCategories(CategoryRepository $categoryRepository) {
+	public function displayListCategories(CategoryRepository $categoryRepository): Response {
 		
 		$categories = $categoryRepository->findAll();
 
@@ -21,7 +22,7 @@ class CategoryController extends AbstractController {
 	}
 
 	#[Route('/details-category/{id}', name:'details-category')]
-	public function displayDetailsCategory(CategoryRepository $categoryRepository, $id) {
+	public function displayDetailsCategory(CategoryRepository $categoryRepository, int $id): Response {
 		
 		$category = $categoryRepository->find($id);
 
