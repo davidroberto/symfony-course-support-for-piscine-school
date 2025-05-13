@@ -22,7 +22,7 @@ class LoginController extends AbstractController {
 
 	}
 
-	#[Route('/logout', name: "logout",  methods: ['GET'])]
+	#[Route('/logout', name: "logout", methods: ['GET'])]
 	public function logout() {
 
 	}
