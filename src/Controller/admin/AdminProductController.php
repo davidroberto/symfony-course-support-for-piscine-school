@@ -43,7 +43,7 @@ class AdminProductController extends AbstractController {
 				$this->addFlash('success', 'Produit créé');
 
 				return $this->redirectToRoute('admin-list-products');
-			} catch (\Exception $exception) {
+			} catch (Exception $exception) {
 				$this->addFlash('error', $exception->getMessage());
 			}
 
@@ -95,6 +95,10 @@ class AdminProductController extends AbstractController {
 	public function displayUpdateProduct($id, ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $entityManager) {
 
 		$product = $productRepository->find($id);
+
+		if(!$product) {
+			return $this->redirectToRoute('admin_404');
+		}
 
 		if ($request->isMethod('POST')) {
 

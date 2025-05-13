@@ -25,6 +25,10 @@ class CategoryController extends AbstractController {
 		
 		$category = $categoryRepository->find($id);
 
+		if(!$category) {
+			return $this->redirectToRoute("404");
+		}
+
 		return $this->render('guest/category/details-category.html.twig', [
 			'category' => $category
 		]);
