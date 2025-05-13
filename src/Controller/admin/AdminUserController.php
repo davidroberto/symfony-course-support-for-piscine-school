@@ -4,6 +4,7 @@
 namespace App\Controller\admin;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminUserController extends AbstractController {
 
-	#[Route('/admin/create-user', name: 'admin-create-user')]
+	#[Route(path: '/admin/create-user', name: 'admin-create-user')]
 	public function displayCreateUser(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager){
-
 
 		if ($request->isMethod('POST')) {
 
@@ -38,6 +38,8 @@ class AdminUserController extends AbstractController {
 				$entityManager->persist($user);
 				$entityManager->flush();
 				$this->addFlash('success','Admin créé');
+				return $this->redirectToRoute('admin-list-admins');
+
 			} catch(Exception $exception) {
 
 				$this->addFlash('error', 'Impossible de créer l\'admin');
@@ -52,10 +54,21 @@ class AdminUserController extends AbstractController {
 
 		}
 
-
 		return $this->render('/admin/user/create-user.html.twig');
 
 	}
+
+
+	#[Route(path: '/admin/list-admins', name: 'admin-list-admins')]
+	public function displayListAdmins(UserRepository $userRepository) {
+
+		$users = $userRepository->findAll();
+
+		return $this->render('/admin/user/list-users.html.twig', [
+			'users' => $users
+		]);
+	}
+
 
 
 }
