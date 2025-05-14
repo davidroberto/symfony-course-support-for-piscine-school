@@ -40,17 +40,20 @@ class Product
     private ?string $image = null;
 
 
-    public function __construct(string $title, string $description, float $price, bool $isPublished, Category $category) {
+    public function __construct(string $title, string $description, float $price, bool $isPublished, Category $category, string $imageNewName) {
 
         if (strlen($title) < 3) {
             throw new Exception('Le titre doit faire plus de 3 caractères');
         }
+
+
 
         $this->title = $title;
         $this->description = $description;
         $this->price = $price;
         $this->isPublished = $isPublished;
         $this->category = $category;
+        $this->image = $imageNewName;
 
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
